@@ -48,7 +48,7 @@ If you try to use them, they will be automatically renamed to a unique ID
 the same way as duplicate source IDs are handled, e.g. a `catalog` source will become `catalog.1`.
 
 Here are the reserved source IDs:
-`_`, `catalog`, `config`, `font`, `health`, `help`, `index`, `manifest`, `metrics`, `refresh`,
+`_`, `catalog`, `config`, `font`, `health`, `help`, `index`, `manifest`, `mcp`, `metrics`, `refresh`,
 `reload`, `sprite`, `status`.
 
 ### Source TileJSON
@@ -112,3 +112,32 @@ curl localhost:3000/catalog | jq
       },
     }
     ```
+
+### MCP Endpoint
+
+!!! warning
+    This feature is currently unstable and thus not included in the default build.
+    Its behavior may change in patch releases.
+
+    To experiment with it, [install Rust](https://rust-lang.org/tools/install/), and run this to download, compile, and install Martin with the unstable feature:
+
+    ```bash
+    cargo install martin --locked --features=unstable-mcp
+    ```
+
+Martin can serve a [Model Context Protocol](https://modelcontextprotocol.io) endpoint at `/mcp`, so AI agents can see what it serves before they write a MapLibre style against it.
+Turn it on with `--mcp`, or in the [configuration file](config-file/index.md):
+
+```yaml
+endpoints:
+  mcp: true
+```
+
+Its tools only read:
+
+- `list_sources` lists the tile sources, sprites, fonts and styles, with the paths to use for them.
+- `describe_source` returns the TileJSON of a tile source, with its source layers and their fields.
+- `get_features` reads the vector tile that covers a place, and lists each source layer's geometry types, field values and a few example features.
+
+The endpoint only answers requests whose `Host` is `localhost`, `127.0.0.1` or `::1`, so web pages cannot reach it through DNS rebinding.
+Point an MCP client at `http://localhost:3000/mcp` to use it.

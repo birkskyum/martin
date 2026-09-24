@@ -1,0 +1,86 @@
+---
+source: e2e-tests/tests/mcp.rs
+expression: "response.json()[\"result\"]"
+---
+{
+  "tools": [
+    {
+      "description": "Returns the TileJSON of a tile source: its zoom range, bounds, and for vector tiles, the source layers with their fields and field types.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "source": {
+            "description": "A tile source id from `list_sources`, or several joined by commas to combine them.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source"
+        ],
+        "type": "object"
+      },
+      "name": "describe_source"
+    },
+    {
+      "description": "Reads the vector tile of a source that covers a place at a zoom level, and lists for each source layer how many features it has, their geometry types, up to 8 values of each field, and a few example features. Use it to learn the real field values, like the classes of roads, before writing filters.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+          "latitude": {
+            "description": "Latitude of a place inside the tile to read.",
+            "format": "double",
+            "type": "number"
+          },
+          "layer": {
+            "description": "Only show this source layer.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "limit": {
+            "description": "How many features of each source layer to show. Defaults to 5.",
+            "format": "uint",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "longitude": {
+            "description": "Longitude of a place inside the tile to read.",
+            "format": "double",
+            "type": "number"
+          },
+          "source": {
+            "description": "A tile source id from `list_sources`. Unlike tile URLs, one source at a time.",
+            "type": "string"
+          },
+          "zoom": {
+            "description": "Zoom level of the tile to read.",
+            "format": "uint8",
+            "maximum": 255,
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "source",
+          "longitude",
+          "latitude",
+          "zoom"
+        ],
+        "type": "object"
+      },
+      "name": "get_features"
+    },
+    {
+      "description": "Lists the tile sources, sprites, fonts and styles this Martin server serves, with the paths to use for them in a MapLibre style.",
+      "inputSchema": {
+        "properties": {},
+        "type": "object"
+      },
+      "name": "list_sources"
+    }
+  ]
+}

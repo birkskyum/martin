@@ -168,6 +168,8 @@ rayon = "1.11.0"
 rcgen = "0.14"
 regex = "1"
 reqwest = { version = "0.13", default-features = false, features = ["rustls", "http2"] }
+rmcp = { version = "3.4", default-features = false, features = ["macros", "schemars", "server"] }
+rmcp-actix-web = "0.13"
 rstest = "0.27.0"
 rustls = "0.23.38"
 # ring feature does not require NASM windows executable, but works slower

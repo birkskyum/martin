@@ -157,6 +157,7 @@ _catalog = []
 _file_kinds = []
 unstable-schemas = ["dep:schemars", "dep:utoipa", "martin-core/unstable-schemas", "default"]
 unstable-duckdb = ["martin-core/unstable-duckdb", "dep:duckdb", "dep:enum-display", "_tiles"]
+unstable-mcp = ["dep:rmcp", "dep:rmcp-actix-web", "mlt", "_tiles"]
 hotpath = [
     "hotpath/hotpath",
     "hotpath-alloc",
@@ -213,6 +214,8 @@ postgis = { workspace = true, optional = true }
 postgres-protocol = { workspace = true, optional = true }
 prometheus = { workspace = true, optional = true }
 ratatui = { workspace = true, optional = true }
+rmcp = { workspace = true, optional = true }
+rmcp-actix-web = { workspace = true, optional = true }
 rustls.workspace = true
 schemars = { workspace = true, optional = true }
 serde.workspace = true

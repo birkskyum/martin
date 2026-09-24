@@ -1,0 +1,20 @@
+---
+source: e2e-tests/tests/mcp.rs
+expression: "call_tool(&martin, \"list_sources\", &json!({})).await"
+---
+Paths on this server: TileJSON /<source>, tiles /<source>/{z}/{x}/{y}, sprites /sprite/<id>, glyphs /font/{fontstack}/{range}, styles /style/<id>.
+
+{
+  "tiles": {
+    "world_cities": {
+      "content_type": "application/x-protobuf",
+      "content_encoding": "gzip",
+      "name": "Major cities from Natural Earth data",
+      "description": "Major cities from Natural Earth data"
+    }
+  },
+  "sprites": {},
+  "fonts": {},
+  "styles": {},
+  "settings": {}
+}

@@ -244,6 +244,12 @@ pub struct EndpointsConfig {
     /// The route has no authentication of its own, so to prevent DOS please put it behind a reverse proxy.
     #[cfg_attr(feature = "unstable-schemas", schemars(example = &false))]
     pub purge_cache: Option<bool>,
+    /// Serve `POST /mcp`, a Model Context Protocol endpoint with read-only tools for AI agents. \[default: false\]
+    ///
+    /// The route only answers requests addressed to localhost, so web pages cannot reach it through DNS rebinding.
+    #[cfg(feature = "unstable-mcp")]
+    #[cfg_attr(feature = "unstable-schemas", schemars(example = &false))]
+    pub mcp: Option<bool>,
 
     #[serde(flatten, skip_serializing)]
     #[cfg_attr(feature = "unstable-schemas", schemars(skip))]

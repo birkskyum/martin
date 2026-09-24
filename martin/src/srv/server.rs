@@ -44,8 +44,8 @@ use crate::srv::tiles;
 /// Reserved keywords must never end in a "dot number" (e.g. ".1").
 /// This list is documented in the `docs/content/using.md` file, which should be kept in sync.
 pub const RESERVED_KEYWORDS: &[&str] = &[
-    "_", "catalog", "config", "font", "health", "help", "index", "manifest", "metrics", "refresh",
-    "reload", "sprite", "status",
+    "_", "catalog", "config", "font", "health", "help", "index", "manifest", "mcp", "metrics",
+    "refresh", "reload", "sprite", "status",
 ];
 
 /// Maps any classified error onto an HTTP response.
@@ -280,6 +280,8 @@ pub fn new_server(
         #[cfg(any(feature = "sprites", feature = "fonts", feature = "styles"))]
         &state,
     )?;
+    #[cfg(feature = "unstable-mcp")]
+    let mcp_tools = super::mcp::MartinTools::when_enabled(&config, &catalog, &state);
 
     let keep_alive = Duration::from_secs(config.keep_alive.unwrap_or(DEFAULT_KEEP_ALIVE));
     let worker_processes = config.worker_processes.unwrap_or_else(num_cpus::get);
@@ -329,10 +331,16 @@ pub fn new_server(
             middleware::from_fn(crate::tui::observe),
         ));
 
-        app.wrap(TracingLogger::default())
+        let app = app
+            .wrap(TracingLogger::default())
             .wrap(cache_control_middleware(cache_control.clone()))
-            .wrap(NormalizePath::new(TrailingSlash::MergeOnly))
-            .configure(|c| router(c, &config))
+            .wrap(NormalizePath::new(TrailingSlash::MergeOnly));
+        // Registered before the tile routes, whose `/{source_ids}` would otherwise match `/mcp`.
+        #[cfg(feature = "unstable-mcp")]
+        let app = app.configure(|c| {
+            super::mcp::register(c, mcp_tools.as_ref(), config.route_prefix.as_deref());
+        });
+        app.configure(|c| router(c, &config))
     };
 
     #[cfg(feature = "lambda")]

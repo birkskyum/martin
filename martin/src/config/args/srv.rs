@@ -48,6 +48,10 @@ pub struct SrvArgs {
     #[arg(short = 'u', long = "webui")]
     #[cfg(all(feature = "webui", not(docsrs)))]
     pub web_ui: Option<WebUiMode>,
+    /// Serve a Model Context Protocol endpoint at /mcp, with read-only tools for AI agents.
+    #[arg(long)]
+    #[cfg(feature = "unstable-mcp")]
+    pub mcp: bool,
     /// If set, the version of the tileset (as specified in the MBTiles or PMTiles metadata)
     /// will be embedded in the TileJSON `tiles` URL, with the set identifier.
     /// For example, if the value of this option is `version`, and the tileset version is `1.0.0`,
@@ -123,6 +127,10 @@ impl SrvArgs {
         #[cfg(all(feature = "webui", not(docsrs)))]
         if self.web_ui.is_some() {
             srv_config.web_ui = self.web_ui;
+        }
+        #[cfg(feature = "unstable-mcp")]
+        if self.mcp {
+            srv_config.endpoints.get_or_insert_default().mcp = Some(true);
         }
         #[cfg(feature = "_tiles")]
         if self.tilejson_url_version_param.is_some() {

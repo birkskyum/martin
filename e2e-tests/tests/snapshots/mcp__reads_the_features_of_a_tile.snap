@@ -1,0 +1,36 @@
+---
+source: e2e-tests/tests/mcp.rs
+expression: "call_tool(&martin, \"get_features\", &arguments).await"
+---
+{
+  "tile": "0/0/0",
+  "layers": {
+    "cities": {
+      "features": 68,
+      "geometry_types": {
+        "MultiPoint": 1,
+        "Point": 67
+      },
+      "fields": {
+        "name": [
+          "Vancouver",
+          "San Francisco",
+          "Los Angeles",
+          "Denver",
+          "Monterrey",
+          "Houston",
+          "Mexico City",
+          "Chicago"
+        ]
+      },
+      "examples": [
+        {
+          "name": "Vancouver"
+        },
+        {
+          "name": "San Francisco"
+        }
+      ]
+    }
+  }
+}

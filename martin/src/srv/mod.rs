@@ -25,6 +25,8 @@ pub use admin::Catalog;
 
 #[cfg(feature = "_tiles")]
 mod cache;
+#[cfg(feature = "unstable-mcp")]
+mod mcp;
 #[cfg(feature = "unstable-schemas")]
 pub use admin::{__path_get_catalog, get_catalog};
 #[cfg(all(feature = "_tiles", feature = "unstable-schemas"))]

@@ -217,8 +217,8 @@ bless-insta *args:  fetch (cargo-install 'cargo-nextest') (cargo-install 'cargo-
 
 # Bless the end-to-end tests, including the ones that need the PostgreSQL database
 bless-e2e *args: fetch start (cargo-install 'cargo-nextest') (cargo-install 'cargo-insta')
-    cargo build --package martin --package mbtiles --features martin/unstable-mlt-v2
-    {{insta_test}} --package martin-e2e-tests --features test-pg,test-mlt-v2 {{args}}
+    cargo build --package martin --package mbtiles --features martin/unstable-mlt-v2,martin/unstable-mcp
+    {{insta_test}} --package martin-e2e-tests --features test-pg,test-mlt-v2,test-mcp {{args}}
 
 bless-pg: fetch start (cargo-install 'cargo-nextest') (cargo-install 'cargo-insta')
     {{insta_test}} --features test-pg,unstable-mlt-v2 --no-default-features --test pg_function_source_test --test pg_reload_test --test pg_server_test --test pg_table_source_test
@@ -330,7 +330,7 @@ clean: stop ui::clean
 
 # Run cargo clippy to lint the code
 clippy *args: fetch
-    cargo clippy --workspace --all-targets --features martin/unstable-duckdb {{args}}
+    cargo clippy --workspace --all-targets --features martin/unstable-duckdb,martin/unstable-mcp,martin-e2e-tests/test-mcp {{args}}
 
 # Validate markdown URLs with markdown-link-check
 clippy-md:
@@ -670,8 +670,8 @@ test-packages-ci: fetch (cargo-install 'cargo-nextest')
 
 # Run the end-to-end tests that drive the compiled martin and mbtiles binaries
 test-e2e *args: fetch (cargo-install 'cargo-nextest')
-    cargo build --package martin --package mbtiles --features martin/unstable-mlt-v2
-    cargo nextest run --package martin-e2e-tests --features test-mlt-v2 {{args}}
+    cargo build --package martin --package mbtiles --features martin/unstable-mlt-v2,martin/unstable-mcp
+    cargo nextest run --package martin-e2e-tests --features test-mlt-v2,test-mcp {{args}}
 
 # Run the end-to-end tests that need the PostgreSQL database
 test-e2e-pg *args: fetch start (cargo-install 'cargo-nextest')

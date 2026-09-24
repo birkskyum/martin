@@ -383,13 +383,17 @@ impl Martin {
 
     /// Perform a POST request carrying a JSON `body`.
     pub async fn post_json(&self, path: &str, body: &[u8]) -> TestResponse {
-        self.send(
-            Method::POST,
-            path,
-            &[("content-type", "application/json")],
-            body,
-        )
-        .await
+        self.post_json_with_headers(path, &[], body).await
+    }
+
+    pub async fn post_json_with_headers(
+        &self,
+        path: &str,
+        headers: &[(&str, &str)],
+        body: &[u8],
+    ) -> TestResponse {
+        let headers = [&[("content-type", "application/json")], headers].concat();
+        self.send(Method::POST, path, &headers, body).await
     }
 
     async fn request(&self, method: Method, path: &str, headers: &[(&str, &str)]) -> TestResponse {
